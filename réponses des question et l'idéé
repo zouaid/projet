@@ -1,0 +1,24 @@
+A: Quelles sont les structures de données à utiliser ? Les matrices B, C et A sont des tableaux bidimensionnels pour stocker les valeurs des matrices , Le tampon T est un tableau unidimensionnel utilisé comme mémoire tampon pour stocker les résultats intermédiaires produits par les threads producteurs, variables de contrôle du tampon , B: Comment allez-vous protéger l'accès à ces données? Pour protéger l'accès aux données partagées entre les threads (matrices, tampon), vous utiliserez des mécanismes de synchronisation, tels que les mutex (verrous) et les variables de condition , C: quels sont les risques? Conditions de concurrence Dépassement de tampon (buffer overflow) Problèmes de synchronisation Gestion des erreurs
+L'idée de créer des branches pour explorer différentes :
+Diviser les matrices en blocs :
+
+Divisez chaque matrice (B et C) en blocs carrés de taille fixe. Par exemple, chaque bloc peut être de taille block_size x block_size.
+Threads Producteurs pour chaque bloc de la matrice résultante A :
+
+Chaque thread producteur sera responsable du calcul d'un bloc spécifique de la matrice résultante A. Chaque bloc de A est le résultat de la multiplication d'un bloc de B par un bloc de C.
+
+Utilisez une boucle pour répartir les blocs de manière équitable entre les threads producteurs.
+
+Utilisation de Mutex pour les blocs de A :
+
+Utilisez un mutex pour chaque bloc de la matrice résultante A. Cela garantit qu'un seul thread à la fois peut mettre à jour un bloc particulier de A.
+Synchronisation avec une barrière :
+
+Utilisez une barrière pour synchroniser les threads producteurs avant qu'ils ne commencent à mettre à jour les blocs de la matrice A. Cela garantit que tous les threads ont terminé leurs calculs avant que les mises à jour ne soient effectuées.
+Threads Consommateurs pour mettre à jour la matrice A :
+
+Les threads consommateurs peuvent être utilisés pour mettre à jour la matrice A à partir des résultats intermédiaires stockés dans les blocs.
+Optimisations possibles :
+
+Utilisez des threads consommateurs supplémentaires pour paralléliser la mise à jour de la matrice A à partir des blocs calculés par les threads producteurs.
+
